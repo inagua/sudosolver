@@ -4,10 +4,13 @@
 (defn no-duplicate? [coll]
     (= (count coll) (count (distinct coll))))
 
+(defn empty-cell? [cell]
+    (= 0 cell))
+
 (defn valid? [cells]
     (and
         (= 9 (count cells))
-        (no-duplicate? (remove #(= 0 %) cells))
+        (no-duplicate? (remove empty-cell? cells))
         (every? #(<= 0 % 9) cells)))
 
 (defn candidates
@@ -16,3 +19,9 @@
         (intersection   (candidates col1) 
                         (candidates col2) 
                         (candidates col3))))
+
+(def indices (range 0 9))
+
+(defn extract-empties [grid]
+    (for [i indices j indices :when (empty-cell? ((grid j) i))]
+        [i j]))
